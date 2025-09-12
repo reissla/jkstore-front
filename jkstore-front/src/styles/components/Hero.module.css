@@ -1,0 +1,94 @@
+.hero {
+  position: relative;
+  height: 70vh;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("/luxury-fashion-store-interior-with-golden-accents.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* ensuring dark background color fallback */
+  background-color: #111827 !important;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  /* strong dark overlay to ensure proper contrast */
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  /* ensuring white text color with important flag */
+  color: #ffffff !important;
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  /* pure white text with important flag to override any conflicts */
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+.titleAccent {
+  /* new class for the accent text in title */
+  display: block;
+  color: #d97706 !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+@media (min-width: 640px) {
+  .title {
+    font-size: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: 5rem;
+  }
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  /* pure white text with important flag for maximum contrast */
+  color: #ffffff !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+@media (min-width: 640px) {
+  .subtitle {
+    font-size: 1.5rem;
+  }
+}
+
+.ctaButton {
+  background-color: #d97706 !important;
+  color: white !important;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ctaButton:hover {
+  background-color: #b45309 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(217, 119, 6, 0.3);
+}
