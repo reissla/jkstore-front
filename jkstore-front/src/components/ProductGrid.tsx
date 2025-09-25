@@ -1,46 +1,27 @@
-import Button from "@/components/ui/Button.jsx"
+import Button from "@/components/ui/Button.tsx"
 import ProductCard from "./ProductCard"
+import { useEffect, useState } from "react";
+import { getAllProducts, getProducthighlighted } from "@/services/produtoService"
 import styles from "@/styles/components/ProductGrid.module.css"
 
-const mockProducts = [
-  {
-    id: 1,
-    name: "Camiseta Premium Básica",
-    price: 89.9,
-    image: "/premium-white-t-shirt-on-model.jpg",
-    category: "Camisetas",
-  },
-  {
-    id: 2,
-    name: "Jaqueta de Couro Clássica",
-    price: 299.9,
-    image: "/black-leather-jacket-fashion.jpg",
-    category: "Jaquetas",
-  },
-  {
-    id: 3,
-    name: "Calça Jeans Slim Fit",
-    price: 159.9,
-    image: "/dark-blue-slim-fit-jeans.jpg",
-    category: "Calças",
-  },
-  {
-    id: 4,
-    name: "Tênis Esportivo Premium",
-    price: 249.9,
-    image: "/white-premium-sneakers.jpg",
-    category: "Calçados",
-  },
-  {
-    id: 5,
-    name: "Camisa Social Elegante",
-    price: 129.9,
-    image: "/white-dress-shirt-formal.jpg",
-    category: "Camisas",
-  }
-]
+export interface Product {
+  id: number;
+  titulo: string;
+  imagem: string;
+  descricao: string;
+  preco: number;
+  disponivel: boolean;
+}
 
 export default function ProductGrid() {
+  const [produtos, setProdutos] = useState<Product[]>([]);
+
+  useEffect(() => {
+    getProducthighlighted().then(response => {
+      setProdutos(response.data);
+    });
+  }, []);
+
   return (
     <section className={styles.section}>
       <div className={styles.container}>
@@ -54,11 +35,9 @@ export default function ProductGrid() {
         </div>
 
         <div className={styles.grid}>
-          {mockProducts.map((product) => (
-            <ProductCard 
-            key={product.id} 
-            product={product} />
-          ))}
+            {produtos.map((produto: Product) => (
+                <ProductCard product={produto} />
+            ))}
         </div>
 
         <div className={styles.cta}>
