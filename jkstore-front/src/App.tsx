@@ -1,21 +1,18 @@
-import Header from "@/components/Header"
-import Hero from "@/components/Hero"
-import ProductGrid from "@/components/ProductGrid"
-import About from "@/components/About"
-import Footer from "@/components/Footer"
-import Style from "@/App.module.css"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
-
   return (
-    <div>
-      <Header />
-      <Hero />
-      <ProductGrid />
-      <About />
-      <Footer />
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App

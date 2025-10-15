@@ -1,13 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Button = () => {
+type ButtonProps = {
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+
+const Button = ({ size, className, onClick, children }: ButtonProps) => {
   return (
     <StyledWrapper>
-      <button>Ver Todos os Produtos</button>
+      <button
+        className={className}
+        onClick={onClick}
+        data-size={size}
+      >
+        {children}
+      </button>
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   button {

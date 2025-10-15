@@ -13,7 +13,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <div className={styles.ProductCard}>
 
       <div className={styles.ProductImage}>
-        <img src="" alt="Imagem do Produto" />
+        <img  alt="Imagem do Produto" />
       </div>
 
       <div className={styles.ProductDetails}>
@@ -22,7 +22,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
         <div className={styles.ProductInfo}>
           <p className={styles.ProductPrice}>R${product.preco}</p>
-          <button className={styles.AddToCart}>Adicionar</button>
+          <button className={styles.AddToCart}>Adicionar ao carrinho</button>
         </div>
 
       </div>

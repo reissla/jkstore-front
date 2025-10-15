@@ -22,6 +22,16 @@ export default function ProductGrid() {
     });
   }, []);
 
+  const buscarProdutos = async () => {
+    try {
+      const response = await getAllProducts();
+      setProdutos(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+    }
+  }
+
   return (
     <section className={styles.section}>
       <div className={styles.container}>
@@ -35,13 +45,13 @@ export default function ProductGrid() {
         </div>
 
         <div className={styles.grid}>
-            {produtos.map((produto: Product) => (
-                <ProductCard product={produto} />
-            ))}
+          {produtos.map((produto: Product) => (
+            <ProductCard key={produto.id} product={produto} />
+          ))}
         </div>
 
         <div className={styles.cta}>
-          <Button size="lg" className={styles.ctaButton}>
+          <Button size="lg" className={styles.ctaButton} onClick={buscarProdutos}>
             Ver Todos os Produtos
           </Button>
 

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Search, ShoppingCart, Menu, X } from "lucide-react"
+import { Search, ShoppingCart, Menu, X, CircleUserRound } from "lucide-react"
 import Button from "@/components/ui/Button.jsx"
 import Input from "@/components/ui/Input.jsx"
 import styles from "@/styles/components/Header.module.css"
@@ -45,12 +45,13 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Cart 
-            <Button variant="outline" size="sm" className={styles.cartButton}>
-              <ShoppingCart className="w-4 h-4" />
+            <Button className={styles.cartButton}>
+              <ShoppingCart className="w-2 h-2" />
               {cartItems > 0 && <span className={styles.cartBadge}>{cartItems}</span>}
             </Button>
-            */}
+            <Button className={styles.cartButton}>
+              <CircleUserRound />
+            </Button>
           </div>
         </div>
 
