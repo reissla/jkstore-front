@@ -1,6 +1,6 @@
-import axios from 'axios';
+import api from './api';
 
-const API_BASE_URL = 'https://localhost:8080/auth'; 
+const API_BASE_URL = '/auth'; 
 
 interface credentials {
   login: string;
@@ -14,5 +14,5 @@ interface registerData {
   senha: string;
 }
 
-export const loginFunction = (credentials: credentials) => axios.post(`${API_BASE_URL}/login`, credentials);
-export const registerFunction = (data: any) => axios.post(`${API_BASE_URL}/register`, data);
+export const loginFunction = (credentials: credentials) => api.post(`${API_BASE_URL}/login`, credentials);
+export const registerFunction = (credentials: registerData) => api.post(`${API_BASE_URL}/register`, credentials);

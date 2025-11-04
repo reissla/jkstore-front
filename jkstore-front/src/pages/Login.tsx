@@ -1,26 +1,31 @@
 import { useState } from "react"
 import { loginFunction } from "@/services/authService";
-import Button  from "@/components/ui/Button";
+import Button from "@/components/ui/Button";
 import "@/styles/components/LoginPage.css"
+import { useNavigate } from "react-router-dom";
 
 type credentials = {
   login: string;
   senha: string;
 }
 
+
 export default function LoginPage() {
+  const navigate = useNavigate(); //chama esse hook pré pronto do react router dom para navegação
 
   const [credentials, setCredentials] = useState<credentials>({ login: "", senha: "" });
 
   async function SendLogin() {
     try {
       const response = await loginFunction(credentials);
-      console.log("Login bem-sucedido:", response.data);
-      //armazenar o token JWT, redirecionar o usuário.
+      const token = response.data;
+      localStorage.setItem("token", token);
+      
+      navigate("/home"); 
     } catch (error) {
       console.error("Erro no login:", error);
     }
-  } 
+  }
 
   return (
     <div className="login-container">
@@ -43,29 +48,29 @@ export default function LoginPage() {
 
         <h1 className="login-title">Login</h1>
 
-        <form className="login-form">
+        <form className="login-form" >
           <div className="form-group">
             <label htmlFor="login" className="form-label">
               Login
             </label>
-            <input type="login" 
-                  id="login" 
-                  className="form-input" 
-                  placeholder="Digite seu login" 
-                  value={credentials.login}
-                  onChange={e => setCredentials({ ...credentials, login: e.target.value })}/>
+            <input type="login"
+              id="login"
+              className="form-input"
+              placeholder="Digite seu login"
+              value={credentials.login}
+              onChange={e => setCredentials({ ...credentials, login: e.target.value })} />
           </div>
 
           <div className="form-group">
             <label htmlFor="password" className="form-label">
               Senha
             </label>
-            <input type="password" 
-                   id="password" 
-                   className="form-input" 
-                   placeholder="••••••••" 
-                   value={credentials.senha}
-                   onChange={e => setCredentials({ ...credentials, senha: e.target.value })}/>
+            <input type="password"
+              id="password"
+              className="form-input"
+              placeholder="••••••••"
+              value={credentials.senha}
+              onChange={e => setCredentials({ ...credentials, senha: e.target.value })} />
           </div>
 
           <a href="#" className="forgot-password">
@@ -73,9 +78,11 @@ export default function LoginPage() {
           </a>
 
           <div className="login-button-container">
-            <Button size="md" onClick={SendLogin}>
-              Entrar
-            </Button>
+
+              <Button size="md" type="button" onClick={SendLogin}>
+                Entrar
+              </Button>
+
           </div>
         </form>
 

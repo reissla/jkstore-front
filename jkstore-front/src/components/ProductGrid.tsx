@@ -15,6 +15,7 @@ export interface Product {
 
 export default function ProductGrid() {
   const [produtos, setProdutos] = useState<Product[]>([]);
+  const [showingAll, setShowingAll] = useState(false);
 
   useEffect(() => {
     getProducthighlighted().then(response => {
@@ -26,6 +27,7 @@ export default function ProductGrid() {
     try {
       const response = await getAllProducts();
       setProdutos(response.data);
+      setShowingAll(true);
       console.log(response.data);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
@@ -51,10 +53,11 @@ export default function ProductGrid() {
         </div>
 
         <div className={styles.cta}>
-          <Button size="lg" className={styles.ctaButton} onClick={buscarProdutos}>
-            Ver Todos os Produtos
-          </Button>
-
+          {!showingAll && (
+            <Button size="lg" className={styles.ctaButton} onClick={buscarProdutos}>
+              Ver Todos os Produtos
+            </Button>
+          )}
         </div>
       </div>
     </section>

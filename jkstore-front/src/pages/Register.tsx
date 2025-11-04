@@ -16,7 +16,6 @@ export default function Register() {
 
   async function SendRegister() {
     try {
-      console.log("Registrando usuário com as credenciais:", credentials);
       const response = await registerFunction(credentials);
     } catch (error) {
       console.error("Erro no registro:", error);
@@ -101,19 +100,7 @@ export default function Register() {
                      />
             </div>
 
-            {/*<div className="register-form-group">
-              <label htmlFor="confirm-password" className="register-label">
-                Confirmar senha
-              </label>
-              <input
-                type="password"
-                id="confirm-password"
-                className="register-input"
-                placeholder="Confirme sua senha"
-                />
-            </div>*/}
-
-            <Button size="md" onClick={SendRegister}>
+            <Button href="/login" size="md" onClick={SendRegister}>
               Cadastrar
             </Button>
 

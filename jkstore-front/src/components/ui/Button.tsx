@@ -6,15 +6,18 @@ type ButtonProps = {
   className?: string;
   onClick?: () => void;
   children: React.ReactNode;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
 }
 
-const Button = ({ size, className, onClick, children }: ButtonProps) => {
+const Button = ({ size, className, onClick, children, href, type }: ButtonProps) => {
   return (
     <StyledWrapper>
       <button
         className={className}
         onClick={onClick}
         data-size={size}
+        type={type}
       >
         {children}
       </button>

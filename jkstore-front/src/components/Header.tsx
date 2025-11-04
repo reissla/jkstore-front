@@ -9,7 +9,6 @@ export default function Header() {
   const [cartItems, setCartItems] = useState(3) // Mock cart count
   const [searchQuery, setSearchQuery] = useState("")
 
-  const menuItems = ["Home", "Produtos", "Sobre", "Contato"]
 
   return (
     <header className={styles.header}>
@@ -24,11 +23,18 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className={styles.desktopNav}>
-            {menuItems.map((item) => (
-              <button key={item} className={styles.navButton}>
-                {item}
+              <button className={styles.navButton}>
+                Home
               </button>
-            ))}
+              <button className={styles.navButton}>
+                Produtos
+              </button>
+              <button className={styles.navButton}>
+                Sobre
+              </button>
+              <button className={styles.navButton}>
+                Contato
+              </button>
           </nav>
           
           <div className={styles.headerActions}>
