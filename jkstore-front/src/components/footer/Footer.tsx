@@ -1,5 +1,5 @@
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react"
-import styles from "@/styles/components/Footer.module.css"
+import styles from "@/components/footer/Footer.module.css"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()

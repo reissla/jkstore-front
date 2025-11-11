@@ -1,8 +1,8 @@
 import Button from "@/components/ui/Button.tsx"
-import ProductCard from "./ProductCard"
+import ProductCard from "@/components/productCard/ProductCard"
 import { useEffect, useState } from "react";
 import { getAllProducts, getProducthighlighted } from "@/services/produtoService"
-import styles from "@/styles/components/ProductGrid.module.css"
+import styles from "@/components/productGrid/ProductGrid.module.css"
 
 export interface Product {
   id: number;

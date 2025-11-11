@@ -10,7 +10,7 @@ type ButtonProps = {
   type?: 'button' | 'submit' | 'reset';
 }
 
-const Button = ({ size, className, onClick, children, href, type }: ButtonProps) => {
+const Button = ({ size, className, onClick, children, type }: ButtonProps) => {
   return (
     <StyledWrapper>
       <button

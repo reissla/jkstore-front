@@ -1,11 +1,11 @@
-import React from 'react';
+
 import Button from "@/components/ui/Button";
 import { addProductToCart } from "@/services/produtoService";
-import type { Product } from "@/components/ProductGrid";
-import {toast, Toaster} from "react-hot-toast";
+import type { Product } from "@/components/productGrid/ProductGrid";
+import {toast} from "react-hot-toast";
 import { ShoppingCart} from 'lucide-react'
-import styles from '@/styles/components/ProductCard.module.css';
-import {verificarUsuarioLogado} from '@/functions/verificarUsuarioLogado';
+import styles from "@/components/productCard/ProductCard.module.css"
+import {verificarUsuarioLogado} from '@/utils/verificarUsuarioLogado';
 import ButtonComprar from '@/components/ui/ButtonComprar'
 
 //Falo ao ts que o ProductCard recebe uma prop product do tipo Product
@@ -19,7 +19,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const adicionarProdutoAoCarrinho = async () => {
 
     try {
-      const response = await addProductToCart(product.id);
+      await addProductToCart(product.id);
       toast.success("Produto adicionado ao carrinho!");
     } catch (error: any) {
       if (error.response && error.response.status === 409) {

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { loginFunction } from "@/services/authService";
 import Button from "@/components/ui/Button";
-import "@/styles/components/LoginPage.css"
+import "@/pages/login/LoginPage.css"
 import { useNavigate } from "react-router-dom";
 
 type credentials = {

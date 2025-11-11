@@ -1,19 +1,19 @@
-import { useState } from "react"
-import { Search, ShoppingCart, Menu, X, CircleUserRound } from "lucide-react"
+import { useState, type ChangeEvent } from "react"
+import { Search, ShoppingCart } from "lucide-react"
 import Button from "@/components/ui/Button.jsx"
 import Input from "@/components/ui/Input.jsx"
-import styles from "@/styles/components/Header.module.css"
-import {verificarUsuarioLogado} from '@/functions/verificarUsuarioLogado';
-import {verificarUsuarioAdmin} from '@/functions/verificarUsuarioAdmin';
+import styles from "@/components/header/Header.module.css"
+import {verificarUsuarioLogado} from '@/utils/verificarUsuarioLogado';
+import {verificarUsuarioAdmin} from '@/utils/verificarUsuarioAdmin';
 import ButtonUser from '@/components/ui/ButtonUser'
 import { useNavigate } from 'react-router-dom';
 
-
+const menuItems: string[] = ["Home", "Produtos", "Contato"];
 
 export default function Header() {
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [cartItems, setCartItems] = useState(3) // Mock cart count
+  const [isMenuOpen, _setIsMenuOpen] = useState(false)
+  const [cartItems, _setCartItems] = useState(3) // Mock cart count
   const [searchQuery, setSearchQuery] = useState("")
 
   const handleCadastrarNovoProduto = async() => {
@@ -55,7 +55,7 @@ export default function Header() {
                   type="text"
                   placeholder="Buscar produtos..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                   className={styles.searchInput}
                 />
               </div>
@@ -66,9 +66,7 @@ export default function Header() {
               {cartItems > 0 && <span className={styles.cartBadge}>{cartItems}</span>}
             </Button>)}
 
-            <ButtonUser >
-              <CircleUserRound />
-            </ButtonUser>
+            <ButtonUser />
           </div>
         </div>
 
@@ -76,7 +74,7 @@ export default function Header() {
         {isMenuOpen && (
           <div className={styles.mobileNav}>
             <div className={styles.mobileNavContent}>
-              {menuItems.map((item) => (
+              {menuItems.map((item: string) => (
                 <button key={item} className={styles.mobileNavButton}>
                   {item}
                 </button>
@@ -88,7 +86,7 @@ export default function Header() {
                     type="text"
                     placeholder="Buscar produtos..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                     className={styles.mobileSearchInput}
                   />
                   <Search className={styles.searchIcon} />

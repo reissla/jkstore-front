@@ -1,4 +1,4 @@
-import "@/styles/components/RegisterPage.css"
+import "@/pages/register/RegisterPage.css"
 import Button from "@/components/ui/Button";
 import { useState } from "react";
 import { registerFunction } from "@/services/authService";
@@ -16,7 +16,7 @@ export default function Register() {
 
   async function SendRegister() {
     try {
-      const response = await registerFunction(credentials);
+      await registerFunction(credentials);
     } catch (error) {
       console.error("Erro no registro:", error);
     }
@@ -107,7 +107,7 @@ export default function Register() {
             <div className="register-footer">
               <p className="register-login-text">
                 Já tem uma conta?{" "}
-                <a href="/login" className="register-login-link">
+                <a href="/" className="register-login-link">
                   Entrar
                 </a>
               </p>

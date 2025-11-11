@@ -1,19 +1,16 @@
-import React from 'react';
 import styled from 'styled-components';
 import {NotebookPen, CircleUserRound, ArrowRightToLine, ArrowLeftFromLine } from 'lucide-react'
-import {verificarUsuarioLogado} from '@/functions/verificarUsuarioLogado';
+import {verificarUsuarioLogado} from '@/utils/verificarUsuarioLogado';
 import { useNavigate } from 'react-router-dom';
 
 type ButtonProps = {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   onClick?: () => void;
-  children: React.ReactNode;
-  href?: string;
   type?: 'button' | 'submit' | 'reset';
 }
 
-const ButtonUser = ({ size, className, onClick, children, href, type }: ButtonProps) => {
+const ButtonUser = ({ size, className, onClick, type }: ButtonProps) => {
     const navigate = useNavigate();
 
     const logOut = async () => {

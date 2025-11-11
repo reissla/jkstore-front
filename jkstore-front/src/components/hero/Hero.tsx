@@ -1,5 +1,4 @@
-import Button from "@/components/ui/Button.jsx"
-import "@/styles/components/Hero.css"
+import "@/components/hero/Hero.css"
 
 export default function Hero() {
   return (

@@ -1,8 +1,8 @@
-import Hero from "@/components/Hero"
-import ProductGrid from "@/components/ProductGrid"
-import About from "@/components/About"
-import Footer from "@/components/Footer";
-import Header from "@/components/Header"
+import Hero from "@/components/hero/Hero"
+import ProductGrid from "@/components/productGrid/ProductGrid"
+import About from "@/components/about/About"
+import Footer from "@/components/footer/Footer";
+import Header from "@/components/header/Header"
 
 function Home() {
 
