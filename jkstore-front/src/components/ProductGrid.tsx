@@ -28,7 +28,6 @@ export default function ProductGrid() {
       const response = await getAllProducts();
       setProdutos(response.data);
       setShowingAll(true);
-      console.log(response.data);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
     }

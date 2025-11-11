@@ -3,12 +3,22 @@ import { Search, ShoppingCart, Menu, X, CircleUserRound } from "lucide-react"
 import Button from "@/components/ui/Button.jsx"
 import Input from "@/components/ui/Input.jsx"
 import styles from "@/styles/components/Header.module.css"
+import {verificarUsuarioLogado} from '@/functions/verificarUsuarioLogado';
+import {verificarUsuarioAdmin} from '@/functions/verificarUsuarioAdmin';
+import ButtonUser from '@/components/ui/ButtonUser'
+import { useNavigate } from 'react-router-dom';
+
+
 
 export default function Header() {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [cartItems, setCartItems] = useState(3) // Mock cart count
   const [searchQuery, setSearchQuery] = useState("")
 
+  const handleCadastrarNovoProduto = async() => {
+    navigate('/cadastrarNovoProduto')
+  }
 
   return (
     <header className={styles.header}>
@@ -30,11 +40,11 @@ export default function Header() {
                 Produtos
               </button>
               <button className={styles.navButton}>
-                Sobre
-              </button>
-              <button className={styles.navButton}>
                 Contato
               </button>
+              {verificarUsuarioAdmin() && <button className={styles.navButton} onClick={handleCadastrarNovoProduto}>
+                Cadastrar Um Novo Produto
+              </button>}
           </nav>
           
           <div className={styles.headerActions}>
@@ -51,13 +61,14 @@ export default function Header() {
               </div>
             </div>
 
-            <Button className={styles.cartButton}>
+            {verificarUsuarioLogado() && (<Button className={styles.cartButton}>
               <ShoppingCart className="w-2 h-2" />
               {cartItems > 0 && <span className={styles.cartBadge}>{cartItems}</span>}
-            </Button>
-            <Button className={styles.cartButton}>
+            </Button>)}
+
+            <ButtonUser >
               <CircleUserRound />
-            </Button>
+            </ButtonUser>
           </div>
         </div>
 

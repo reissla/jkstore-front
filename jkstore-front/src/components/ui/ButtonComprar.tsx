@@ -61,7 +61,7 @@ const StyledWrapper = styled.div`
     left: 0;
     width: 24px;
     height: 24px;
-    color: #22c55e;
+    color: #068fd9;
     opacity: 0;
     visibility: hidden;
   }

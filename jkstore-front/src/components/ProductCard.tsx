@@ -2,7 +2,11 @@ import React from 'react';
 import Button from "@/components/ui/Button";
 import { addProductToCart } from "@/services/produtoService";
 import type { Product } from "@/components/ProductGrid";
+import {toast, Toaster} from "react-hot-toast";
+import { ShoppingCart} from 'lucide-react'
 import styles from '@/styles/components/ProductCard.module.css';
+import {verificarUsuarioLogado} from '@/functions/verificarUsuarioLogado';
+import ButtonComprar from '@/components/ui/ButtonComprar'
 
 //Falo ao ts que o ProductCard recebe uma prop product do tipo Product
 type ProductCardProps = {
@@ -15,12 +19,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const adicionarProdutoAoCarrinho = async () => {
 
     try {
-      console.log(product.id)
       const response = await addProductToCart(product.id);
-      console.log(response);
-
-    } catch (error) {
-      console.log("Erro ao adicionar o produto no carrinho:", error);
+      toast.success("Produto adicionado ao carrinho!");
+    } catch (error: any) {
+      if (error.response && error.response.status === 409) {
+        toast.error("Produto já adicionado ao carrinho!");
+      } else {
+        console.log("Erro ao adicionar o produto no carrinho:", error);
+      }
     }
 
   }
@@ -38,9 +44,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
         <div className={styles.ProductInfo}>
           <p className={styles.ProductPrice}>R${product.preco}</p>
-          <Button className={styles.AddToCart} onClick={adicionarProdutoAoCarrinho}>
-            Adicionar ao carrinho
-          </Button>
+          {verificarUsuarioLogado() ? (
+            <Button onClick={adicionarProdutoAoCarrinho}>
+              <ShoppingCart />
+            </Button>
+          ) : (
+            <ButtonComprar />
+          )}
         </div>
 
       </div>
