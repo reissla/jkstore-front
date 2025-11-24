@@ -1,23 +1,27 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import Button from "@/components/ui/Button"
-import Input from "@/components/ui/Input"
+import { Input } from "@/components/ui/Input"
 import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { createProduct, type AnexoPayload, type CreateProductPayload } from "@/services/produtoService"
 import styles from "./cadastrarProduto.module.css"
+import { toast } from "react-hot-toast"
 
 interface ProductFormData {
   title: string
   image?: FileList
   description: string
   price: string
-  available: boolean
-  highlight: boolean
+  disponivel: boolean
+  destaque: boolean
 }
 
 export function CreateProductForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [attachmentData, setAttachmentData] = useState<AnexoPayload | null>(null)
+  const [pendingProducts, setPendingProducts] = useState<CreateProductPayload[]>([])
+  const [isSending, setIsSending] = useState(false)
   const {
     register,
     handleSubmit,
@@ -30,20 +34,42 @@ export function CreateProductForm() {
       title: "",
       description: "",
       price: "",
-      available: true,
-      highlight: false,
+      disponivel: true,
+      destaque: false,
     },
   })
 
   const imageFile = watch("image")
 
-  if (imageFile && imageFile.length > 0) {
+  useEffect(() => {
+    if (!imageFile || imageFile.length === 0) {
+      setImagePreview(null)
+      setAttachmentData(null)
+      return
+    }
+
+    const file = imageFile[0]
     const reader = new FileReader()
     reader.onloadend = () => {
-      setImagePreview(reader.result as string)
+      const result = reader.result as string
+      setImagePreview(result)
+      const base64 = result?.split(",")[1] ?? ""
+      setAttachmentData({
+        nome: file.name,
+        nomeExibicao: file.name,
+        ordemInsercao: 0,
+        url: "",
+        base64,
+      })
     }
-    reader.readAsDataURL(imageFile[0])
-  }
+    reader.readAsDataURL(file)
+
+    return () => {
+      if (reader.readyState === FileReader.LOADING) {
+        reader.abort()
+      }
+    }
+  }, [imageFile])
 
   const formatBRL = (value: string) => {
     const numbers = value.replace(/\D/g, "")
@@ -51,26 +77,97 @@ export function CreateProductForm() {
     return numberFloat.replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
   }
 
-  const onSubmit = (data: ProductFormData) => {
-    const formattedData = {
-      ...data,
-      price: formatBRL(data.price),
-      image: imageFile?.[0]?.name || "Sem imagem",
+  const parsePriceToNumber = (value: string) => {
+    if (!value) return 0
+    return Number(value.replace(/\./g, "").replace(",", ".")) || 0
+  }
+
+  const processImageToBase64 = (file: File): Promise<AnexoPayload> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const result = reader.result as string
+        const base64 = result?.split(",")[1] ?? ""
+        resolve({
+          nome: file.name,
+          nomeExibicao: file.name,
+          ordemInsercao: 0,
+          url: "",
+          base64,
+        })
+      }
+      reader.onerror = () => reject(new Error("Erro ao processar imagem"))
+      reader.readAsDataURL(file)
+    })
+  }
+
+  const buildProductPayload = (
+    formData: ProductFormData,
+    attachment?: AnexoPayload | null,
+  ): CreateProductPayload => {
+    const { title, description, price, disponivel, destaque } = formData
+
+    return {
+      titulo: title,
+      descricao: description,
+      preco: parsePriceToNumber(price),
+      disponivel,
+      destaque,
+      imagemProduto: attachment ?? undefined,
     }
-    console.log("Dados do Produto:", formattedData)
-    alert("Produto salvo com sucesso! Verifique o console.")
+  }
+
+  const onSubmit = async (data: ProductFormData) => {
+    let finalAttachmentData = attachmentData
+
+    // Se há uma imagem selecionada mas ainda não foi processada, processa agora
+    if (data.image && data.image.length > 0 && !finalAttachmentData) {
+      try {
+        finalAttachmentData = await processImageToBase64(data.image[0])
+      } catch (error) {
+        console.error("Erro ao processar imagem:", error)
+        toast.error("Erro ao processar imagem. Tente novamente.")
+        return
+      }
+    }
+
+    const productPayload = buildProductPayload(data, finalAttachmentData)
+    setPendingProducts((prev) => [...prev, productPayload])
+    toast.success("Produto adicionado à lista")
+    handleCancel()
+  }
+
+  const handleSendPendingProducts = async () => {
+    if (!pendingProducts.length) {
+      toast.error("Adicione pelo menos um produto antes de enviar.")
+      return
+    }
+
+    setIsSending(true)
+    try {
+      await Promise.all(pendingProducts.map((product) => createProduct(product)))
+      toast.success(`${pendingProducts.length} produto(s) enviados com sucesso!`)
+      console.log(pendingProducts)
+      setPendingProducts([])
+    } catch (error) {
+      console.error("Erro ao enviar produtos:", error)
+      toast.error("Erro ao enviar produtos. Tente novamente.")
+    } finally {
+      setIsSending(false)
+    }
   }
 
   const handleCancel = () => {
     reset()
     setImagePreview(null)
+    setAttachmentData(null)
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.header}>
-          <h2 className="text-2xl">Criar Novo Produto</h2>
+          <h2 className={styles.subTitle}>Criar Novo Produto</h2>
           <p>Preencha os campos abaixo para adicionar um novo produto ao seu catálogo</p>
         </div>
 
@@ -81,17 +178,24 @@ export function CreateProductForm() {
               <Label htmlFor="title" className={styles.label}>
                 Título do Produto *
               </Label>
-              <Input
-                id="title"
-                placeholder="Ex: Teclado Mecânico RGB"
-                {...register("title", {
+              <Controller
+                name="title"
+                control={control}
+                rules={{
                   required: "Título é obrigatório",
                   minLength: {
                     value: 3,
                     message: "Título deve ter pelo menos 3 caracteres",
                   },
-                })}
-                className={errors.title ? "border-destructive" : ""}
+                }}
+                render={({ field }) => (
+                  <Input
+                    id="title"
+                    placeholder="Ex: Teclado Mecânico RGB"
+                    {...field}
+                    className={`${styles.inputField} ${errors.title ? "border-destructive" : ""}`}
+                  />
+                )}
               />
               {errors.title && <p className={styles.errorMessage}>{errors.title.message}</p>}
             </div>
@@ -103,7 +207,22 @@ export function CreateProductForm() {
               </Label>
               <div className={styles.imageContainer}>
                 <div className={styles.imageUpload}>
-                  <Input id="image" type="file" accept="image/*" {...register("image")} />
+                  <Controller
+                    name="image"
+                    control={control}
+                    render={({ field: { onChange, value, ...field } }) => (
+                      <Input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        {...field}
+                        className={styles.inputField}
+                        onChange={(e) => {
+                          onChange(e.target.files)
+                        }}
+                      />
+                    )}
+                  />
                   <p className={styles.helperText}>PNG, JPG, GIF até 5MB</p>
                 </div>
 
@@ -126,6 +245,7 @@ export function CreateProductForm() {
                 placeholder="Descreva as características e benefícios do produto..."
                 rows={4}
                 {...register("description")}
+                className={styles.textareaField}
               />
               <p className={styles.helperText}>{watch("description")?.length || 0} caracteres</p>
             </div>
@@ -137,24 +257,36 @@ export function CreateProductForm() {
               </Label>
               <div className={styles.priceInputWrapper}>
                 <span className={styles.pricePrefix}>R$</span>
-                <Input
-                  id="price"
-                  type="text"
-                  placeholder="0,00"
-                  {...register("price", {
+                <Controller
+                  name="price"
+                  control={control}
+                  rules={{
                     required: "Preço é obrigatório",
                     validate: (value) => {
                       const numbers = value.replace(/\D/g, "")
                       return numbers !== "" && numbers !== "0" ? true : "Preço deve ser maior que 0"
                     },
-                  })}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, "")
-                    if (value) {
-                      e.target.value = formatBRL(value)
-                    }
                   }}
-                  className={`${styles.priceInput} ${errors.price ? "border-destructive" : ""}`}
+                  render={({ field }) => (
+                    <Input
+                      id="price"
+                      type="text"
+                      placeholder="0,00"
+                      {...field}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "")
+                        if (value) {
+                          const formatted = formatBRL(value)
+                          field.onChange(formatted)
+                        } else {
+                          field.onChange("")
+                        }
+                      }}
+                      className={`${styles.priceInput} ${styles.inputField} ${
+                        errors.price ? "border-destructive" : ""
+                      }`}
+                    />
+                  )}
                 />
               </div>
               {errors.price && <p className={styles.errorMessage}>{errors.price.message}</p>}
@@ -163,40 +295,49 @@ export function CreateProductForm() {
             <div className={styles.togglesContainer}>
               <div className={styles.toggleItem}>
                 <div className={styles.toggleContent}>
-                  <div className={`${styles.toggleIcon} ${styles.toggleIconCheck}`}>
-                    <svg className={styles.toggleIconCheckSvg} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <Label className={`${styles.toggleLabel}`}>Disponível para venda</Label>
-                    <p className={styles.toggleDescription}>O produto será visível para clientes</p>
-                  </div>
-                </div>
-                <Controller
-                  name="available"
-                  control={control}
-                  render={({ field }) => <Switch checked={field.value} onCheckedChange={field.onChange} />}
-                />
-              </div>
-
-              <div className={styles.toggleItem}>
-                <div className={styles.toggleContent}>
                   <div className={`${styles.toggleIcon} ${styles.toggleIconStar}`}>
                     <svg className={styles.toggleIconStarSvg} fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                     </svg>
                   </div>
-                  <div>
+
+                  <div className={styles.toggleLabelContainer}>
                     <Label className={styles.toggleLabel}>Destacar produto</Label>
                     <p className={styles.toggleDescription}>Aparecerá em destaque na página inicial</p>
                   </div>
+
                 </div>
-                <Controller
-                  name="highlight"
-                  control={control}
-                  render={({ field }) => <Switch checked={field.value} onCheckedChange={field.onChange} />}
-                />
+                <div className={styles.highlightControls}>
+                  <Controller
+                    name="disponivel"
+                    control={control}
+                    render={({ field }) => (
+                      <div className={styles.availabilityControl}>
+                        <Label className={styles.toggleLabel}>Disponibilidade</Label>
+                        <div className={styles.availabilityOptions}>
+                          <button
+                            type="button"
+                            className={`${styles.availabilityButton} ${
+                              field.value ? styles.availabilityButtonActive : ""
+                            }`}
+                            onClick={() => field.onChange(true)}
+                          >
+                            Disponível
+                          </button>
+                          <button
+                            type="button"
+                            className={`${styles.availabilityButton} ${
+                              !field.value ? styles.availabilityButtonActive : ""
+                            }`}
+                            onClick={() => field.onChange(false)}
+                          >
+                            Indisponível
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  />
+                </div>
               </div>
             </div>
 
@@ -214,6 +355,72 @@ export function CreateProductForm() {
               </Button>
             </div>
           </form>
+        </div>
+
+        <div className={styles.pendingSection}>
+          <div className={styles.pendingHeader}>
+            <div>
+              <h3 className={styles.pendingTitle}>Produtos adicionados</h3>
+            </div>
+            <Button
+              type="button"
+              onClick={handleSendPendingProducts}
+              disabled={!pendingProducts.length || isSending}
+              className={styles.sendButton}
+            >
+              {isSending
+                ? "Enviando..."
+                : pendingProducts.length
+                  ? `Enviar ${pendingProducts.length} produto(s)`
+                  : "Enviar produtos"}
+            </Button>
+          </div>
+
+          {pendingProducts.length > 0 ? (
+            <div className={styles.tableWrapper}>
+              <table className={styles.pendingTable}>
+                <thead className={styles.pendingTableHeader}>
+                  <tr>
+                    <th>Título</th>
+                    <th>Preço</th>
+                    <th>Disponível</th>
+                    <th>Destaque</th>
+                    <th>Imagem</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingProducts.map((product, index) => (
+                    <tr key={`${product.titulo}-${index}`}>
+                      <td>{product.titulo}</td>
+                      <td>
+                        {product.preco.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        })}
+                      </td>
+                      <td>{product.disponivel ? "Sim" : "Não"}</td>
+                      <td>{product.destaque ? "Sim" : "Não"}</td>
+                      <td>{product.imagemProduto && product.imagemProduto.nomeExibicao ? product.imagemProduto.nomeExibicao : "Sem imagem"}</td>
+                      <td>
+                        <button
+                          type="button"
+                          className={styles.removeButton}
+                          onClick={() =>
+                            setPendingProducts((prev) => prev.filter((_, i) => i !== index))
+                          }
+                        >
+                          Remover
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className={styles.pendingEmpty}>Nenhum produto na lista ainda.</p>
+          )}
         </div>
       </div>
     </div>

@@ -1,16 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-type ButtonProps = {
+export type ButtonProps = {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   onClick?: () => void;
   children: React.ReactNode;
   href?: string;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
-const Button = ({ size, className, onClick, children, type }: ButtonProps) => {
+const Button = ({ size, className, onClick, children, type, disabled }: ButtonProps) => {
   return (
     <StyledWrapper>
       <button
@@ -18,6 +19,7 @@ const Button = ({ size, className, onClick, children, type }: ButtonProps) => {
         onClick={onClick}
         data-size={size}
         type={type}
+        disabled={disabled}
       >
         {children}
       </button>

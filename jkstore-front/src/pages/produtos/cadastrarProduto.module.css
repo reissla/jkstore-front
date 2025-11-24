@@ -13,6 +13,17 @@
 
 .header {
   border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.subTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  font: bold;
+  color: #000000;
 }
 
 .form {
@@ -81,6 +92,17 @@
   flex: 1;
 }
 
+.inputField,
+.textareaField {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  transition: border-color 0.2s ease;
+}
+
+.inputField:focus-visible,
+.textareaField:focus-visible {
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
 .togglesContainer {
   display: flex;
   flex-direction: column;
@@ -94,6 +116,57 @@
   padding: 0.75rem;
   border-radius: 0.5rem;
   border: 1px solid var(--border);
+}
+
+.highlightControls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.highlightSwitch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.highlightSwitchLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-muted-foreground);
+}
+
+.availabilityControl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 14rem;
+}
+
+.availabilityOptions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.availabilityButton {
+  cursor: pointer;
+  padding: 0.45rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: inherit;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.availabilityButtonActive {
+  border-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #04193f;
 }
 
 .toggleContent {
@@ -137,6 +210,12 @@
   cursor: pointer;
 }
 
+.toggleLabelContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .toggleDescription {
   font-size: 0.75rem;
   color: var(--color-muted-foreground);
@@ -155,4 +234,80 @@
 
 .buttonCancel {
   background-color: transparent;
+}
+
+.pendingSection {
+  margin-top: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  background: var(--background, #192233);
+}
+
+.pendingHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pendingTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.pendingSubtitle {
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground);
+}
+
+.sendButton {
+  min-width: 12rem;
+}
+
+.pendingTableHeader {
+  background-color: #04193f;
+}
+
+.tableWrapper {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.pendingTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.pendingTable th,
+.pendingTable td {
+  border: 1px solid var(--border);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.pendingTable th {
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.pendingEmpty {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground);
+  text-align: center;
+}
+
+.removeButton {
+  background: transparent;
+  border: none;
+  color: var(--color-destructive, #ef4444);
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0;
+}
+
+.removeButton:hover {
+  text-decoration: underline;
 }

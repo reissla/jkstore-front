@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent } from "react"
 import { Search, ShoppingCart } from "lucide-react"
 import Button from "@/components/ui/Button.jsx"
-import Input from "@/components/ui/Input.jsx"
+import { Input } from "@/components/ui/Input"
 import styles from "@/components/header/Header.module.css"
 import {verificarUsuarioLogado} from '@/utils/verificarUsuarioLogado';
 import {verificarUsuarioAdmin} from '@/utils/verificarUsuarioAdmin';
