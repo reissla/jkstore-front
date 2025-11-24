@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { createProduct, type AnexoPayload, type CreateProductPayload } from "@/services/produtoService"
 import styles from "./cadastrarProduto.module.css"
 import { toast } from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 interface ProductFormData {
   title: string
@@ -18,6 +19,7 @@ interface ProductFormData {
 }
 
 export function CreateProductForm() {
+  const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [attachmentData, setAttachmentData] = useState<AnexoPayload | null>(null)
   const [pendingProducts, setPendingProducts] = useState<CreateProductPayload[]>([])
@@ -147,8 +149,8 @@ export function CreateProductForm() {
     try {
       await Promise.all(pendingProducts.map((product) => createProduct(product)))
       toast.success(`${pendingProducts.length} produto(s) enviados com sucesso!`)
-      console.log(pendingProducts)
       setPendingProducts([])
+      navigate("/home")
     } catch (error) {
       console.error("Erro ao enviar produtos:", error)
       toast.error("Erro ao enviar produtos. Tente novamente.")
@@ -294,20 +296,36 @@ export function CreateProductForm() {
 
             <div className={styles.togglesContainer}>
               <div className={styles.toggleItem}>
-                <div className={styles.toggleContent}>
-                  <div className={`${styles.toggleIcon} ${styles.toggleIconStar}`}>
-                    <svg className={styles.toggleIconStarSvg} fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                    </svg>
-                  </div>
-
-                  <div className={styles.toggleLabelContainer}>
-                    <Label className={styles.toggleLabel}>Destacar produto</Label>
-                    <p className={styles.toggleDescription}>Aparecerá em destaque na página inicial</p>
-                  </div>
-
-                </div>
                 <div className={styles.highlightControls}>
+                  <Controller
+                    name="destaque"
+                    control={control}
+                    render={({ field }) => (
+                      <div className={styles.availabilityControl}>
+                        <Label className={styles.toggleLabel}>Destaque</Label>
+                        <div className={styles.availabilityOptions}>
+                          <button
+                            type="button"
+                            className={`${styles.availabilityButton} ${
+                              field.value ? styles.availabilityButtonActive : ""
+                            }`}
+                            onClick={() => field.onChange(true)}
+                          >
+                            Em destaque
+                          </button>
+                          <button
+                            type="button"
+                            className={`${styles.availabilityButton} ${
+                              !field.value ? styles.availabilityButtonActive : ""
+                            }`}
+                            onClick={() => field.onChange(false)}
+                          >
+                            Sem destaque
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  />
                   <Controller
                     name="disponivel"
                     control={control}
@@ -401,7 +419,7 @@ export function CreateProductForm() {
                       </td>
                       <td>{product.disponivel ? "Sim" : "Não"}</td>
                       <td>{product.destaque ? "Sim" : "Não"}</td>
-                      <td>{product.imagemProduto && product.imagemProduto.nomeExibicao ? product.imagemProduto.nomeExibicao : "Sem imagem"}</td>
+                      <td>{product.imagemProduto && product.imagemProduto.nomeExibicao ? product.imagemProduto.nomeExibicao.substring(0, 5) + "..." : "Sem imagem"}</td>
                       <td>
                         <button
                           type="button"

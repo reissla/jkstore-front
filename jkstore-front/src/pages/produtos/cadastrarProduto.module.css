@@ -241,7 +241,6 @@
   border: 1px solid var(--border);
   border-radius: 0.75rem;
   padding: 1.5rem;
-  background: var(--background, #192233);
 }
 
 .pendingHeader {
