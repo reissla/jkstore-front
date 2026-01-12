@@ -1,6 +1,6 @@
 import api from './api';
 
-const API_BASE_URL = '/auth'; 
+const API_BASE_URL = '/auth';
 
 interface credentials {
   login: string;
@@ -8,7 +8,7 @@ interface credentials {
 }
 
 interface registerData {
-  name: string;
+  nome: string;
   login: string;
   email: string;
   senha: string;

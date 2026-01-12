@@ -3,21 +3,38 @@ import { Search, ShoppingCart } from "lucide-react"
 import Button from "@/components/ui/Button.jsx"
 import { Input } from "@/components/ui/Input"
 import styles from "@/components/header/Header.module.css"
-import {verificarUsuarioLogado} from '@/utils/verificarUsuarioLogado';
-import {verificarUsuarioAdmin} from '@/utils/verificarUsuarioAdmin';
+import { verificarUsuarioLogado } from '@/utils/verificarUsuarioLogado';
+import { verificarUsuarioAdmin } from '@/utils/verificarUsuarioAdmin';
 import ButtonUser from '@/components/ui/ButtonUser'
 import { useNavigate } from 'react-router-dom';
+import { useSearch } from '@/contexts/SearchContext';
+import { useCart } from '@/contexts/CartContext';
 
 const menuItems: string[] = ["Home", "Produtos", "Contato"];
 
 export default function Header() {
   const navigate = useNavigate();
+  const { setSearchTerm } = useSearch();
+  const { cartCount, toggleCart } = useCart();
   const [isMenuOpen, _setIsMenuOpen] = useState(false)
-  const [cartItems, _setCartItems] = useState(3) // Mock cart count
   const [searchQuery, setSearchQuery] = useState("")
 
-  const handleCadastrarNovoProduto = async() => {
+  const handleCadastrarNovoProduto = async () => {
     navigate('/cadastrarNovoProduto')
+  }
+
+  const handleBuscarProduto = () => {
+    if (searchQuery.trim()) {
+      setSearchTerm(searchQuery.trim());
+    } else {
+      setSearchTerm(null);
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleBuscarProduto()
+    }
   }
 
   return (
@@ -33,20 +50,20 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className={styles.desktopNav}>
-              <button className={styles.navButton}>
-                Home
-              </button>
-              <button className={styles.navButton}>
-                Produtos
-              </button>
-              <button className={styles.navButton}>
-                Contato
-              </button>
-              {verificarUsuarioAdmin() && <button className={styles.navButton} onClick={handleCadastrarNovoProduto}>
-                Cadastrar Um Novo Produto
-              </button>}
+            <button className={styles.navButton}>
+              Home
+            </button>
+            <button className={styles.navButton}>
+              Produtos
+            </button>
+            <button className={styles.navButton}>
+              Contato
+            </button>
+            {verificarUsuarioAdmin() && <button className={styles.navButton} onClick={handleCadastrarNovoProduto}>
+              Cadastrar Um Novo Produto
+            </button>}
           </nav>
-          
+
           <div className={styles.headerActions}>
             {/* Search */}
             <div className={styles.searchContainer}>
@@ -56,15 +73,25 @@ export default function Header() {
                   placeholder="Buscar produtos..."
                   value={searchQuery}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
                   className={styles.searchInput}
                 />
+                <button
+                  onClick={handleBuscarProduto}
+                  className={styles.searchButton}
+                  aria-label="Buscar produtos"
+                >
+                  <Search className={styles.searchIcon} />
+                </button>
               </div>
             </div>
 
-            {verificarUsuarioLogado() && (<Button className={styles.cartButton}>
-              <ShoppingCart className="w-2 h-2" />
-              {cartItems > 0 && <span className={styles.cartBadge}>{cartItems}</span>}
-            </Button>)}
+            {verificarUsuarioLogado() && (
+              <Button className={styles.cartButton} onClick={toggleCart}>
+                <ShoppingCart className="w-2 h-2" />
+                {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
+              </Button>
+            )}
 
             <ButtonUser />
           </div>
@@ -87,9 +114,16 @@ export default function Header() {
                     placeholder="Buscar produtos..."
                     value={searchQuery}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     className={styles.mobileSearchInput}
                   />
-                  <Search className={styles.searchIcon} />
+                  <button
+                    onClick={handleBuscarProduto}
+                    className={styles.mobileSearchButton}
+                    aria-label="Buscar produtos"
+                  >
+                    <Search className={styles.searchIcon} />
+                  </button>
                 </div>
               </div>
             </div>

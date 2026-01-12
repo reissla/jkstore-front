@@ -1,7 +1,6 @@
 .hero {
   position: relative;
-  height: 70vh;
-  min-height: 500px;
+  min-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,42 +8,49 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  /* ensuring dark background color fallback */
-  background-color: #111827 !important;
+  background-attachment: fixed;
+  background-color: var(--color-background-dark);
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  /* strong dark overlay to ensure proper contrast */
-  background: rgba(0, 0, 0, 0.8) !important;
+  background: linear-gradient(135deg,
+      rgba(15, 15, 15, 0.92) 0%,
+      rgba(26, 26, 26, 0.85) 50%,
+      rgba(15, 15, 15, 0.9) 100%);
 }
 
 .content {
   position: relative;
   z-index: 10;
   text-align: center;
-  /* ensuring white text color with important flag */
-  color: #ffffff !important;
-  max-width: 48rem;
+  color: var(--color-text-inverse);
+  max-width: 52rem;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 var(--space-6);
+  animation: fadeIn 0.8s ease forwards;
 }
 
 .title {
   font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  /* pure white text with important flag to override any conflicts */
-  color: #ffffff !important;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  font-weight: 800;
+  margin-bottom: var(--space-6);
+  color: var(--color-text-inverse);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .titleAccent {
-  /* new class for the accent text in title */
   display: block;
-  color: #d97706 !important;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 50%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  animation: shimmer 3s linear infinite;
+  background-size: 200% auto;
 }
 
 @media (min-width: 640px) {
@@ -61,34 +67,56 @@
 
 .subtitle {
   font-size: 1.25rem;
-  margin-bottom: 2rem;
-  /* pure white text with important flag for maximum contrast */
-  color: #ffffff !important;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+  margin-bottom: var(--space-10);
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 400;
+  line-height: 1.7;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (min-width: 640px) {
   .subtitle {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
   }
 }
 
 .ctaButton {
-  background-color: #d97706 !important;
-  color: white !important;
-  padding: 1rem 2rem;
-  font-size: 1.125rem;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  padding: 1.125rem 2.5rem;
+  font-size: 1rem;
   font-weight: 600;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all var(--transition-slow);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaButton::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+  opacity: 0;
+  transition: opacity var(--transition-base);
 }
 
 .ctaButton:hover {
-  background-color: #b45309 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(217, 119, 6, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px -10px rgba(201, 162, 39, 0.5);
+}
+
+.ctaButton:hover::before {
+  opacity: 1;
+}
+
+.ctaButton span {
+  position: relative;
+  z-index: 1;
 }

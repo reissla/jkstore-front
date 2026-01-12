@@ -1,43 +1,236 @@
-.ProductCard{
-  background-color: rgb(255, 255, 255);
-  
+.ProductCard {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: all var(--transition-slow);
+  border: 1px solid var(--color-border-light);
+  position: relative;
 }
 
-.ProductCard:hover{
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
-  transition: all 0.4s ease;
+.ProductCard:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: transparent;
 }
 
-.ProductImage{
-  width: 150px;
-  height: 150px;
-  margin: 0 auto;
+.ProductCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.ProductCard:hover::before {
+  opacity: 1;
+}
+
+.ProductImage {
+  width: 100%;
+  height: 220px;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(180deg, var(--color-background) 0%, var(--color-surface) 100%);
+  overflow: hidden;
+  position: relative;
 }
 
-.ProductDetails{
-  text-align: center;
-  padding: 1rem;
+.ProductImage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(255, 255, 255, 0.8) 100%);
+  pointer-events: none;
 }
 
-.ProductName{
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+.image {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  transition: transform var(--transition-slow);
 }
 
-.ProductInfo{
+.ProductCard:hover .image {
+  transform: scale(1.08);
+}
+
+.ProductDetails {
+  padding: var(--space-5);
+  text-align: left;
+}
+
+.ProductName {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ProductInfo {
   display: flex;
-  flex-direction: space-between;
-  align-items: center;
-  gap: 0.9rem;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
-.ProductPrice{
-  font-size: 1rem;
-  color: #4B5563;
-  margin-bottom: 1rem;
+.ProductPrice {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin: 0;
+}
+
+.ProductDescription {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.AddToCartButton {
+  width: 100%;
+  padding: 0.875rem var(--space-4);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  margin-top: var(--space-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.AddToCartButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold);
+}
+
+.AddToCartButton:active {
+  transform: translateY(0);
+}
+
+.badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 10;
+}
+
+.unavailable {
+  opacity: 0.7;
+}
+
+.unavailable .ProductImage {
+  filter: grayscale(30%);
+}
+
+.unavailableBadge {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  background: var(--color-text-secondary);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.notifyButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.5rem 0.875rem;
+  background: transparent;
+  border: 1.5px solid var(--color-secondary);
+  color: var(--color-secondary);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+
+.notifyButton:hover {
+  background: var(--color-secondary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.notifyButton svg {
+  flex-shrink: 0;
+}
+
+.actionButtons {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.actionButtons button {
+  flex: 1;
+  min-width: 0;
+}
+
+.actionButtons button span {
+  margin-left: 4px;
+}
+
+.itemImage {
+  width: 100%;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, var(--color-background) 0%, var(--color-surface) 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+.itemImage img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  transition: transform var(--transition-slow);
+}
+
+.ProductCard:hover .itemImage img {
+  transform: scale(1.08);
+}
+
+.imagePlaceholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
+  color: var(--color-text-secondary);
 }

@@ -28,41 +28,67 @@ const Button = ({ size, className, onClick, children, type, disabled }: ButtonPr
 };
 
 const StyledWrapper = styled.div`
+  display: inline-flex;
+  
   button {
    appearance: none;
    background-color: transparent;
-   border: 0.125em solid #1A1A1A;
-   border-radius: 0.9375em;
+   border: 2px solid #1A1A1A;
+   border-radius: 12px;
    box-sizing: border-box;
    color: #3B3B3B;
    cursor: pointer;
-   display: inline-block;
-   font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-   font-size: 16px;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   gap: 6px;
+   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+   font-size: 14px;
    font-weight: 600;
-   line-height: normal;
+   line-height: 1.2;
    margin: 0;
-   min-height: 3.75em;
-   min-width: 0;
+   min-height: 42px;
+   min-width: 42px;
    outline: none;
-   padding: 1em 2.3em;
+   padding: 10px 18px;
    text-align: center;
    text-decoration: none;
-   transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+   transition: all 200ms cubic-bezier(.23, 1, 0.32, 1);
    user-select: none;
    -webkit-user-select: none;
    touch-action: manipulation;
-   will-change: transform;
+   white-space: nowrap;
+  }
+
+  button[data-size="sm"] {
+   font-size: 13px;
+   min-height: 36px;
+   padding: 8px 14px;
+   border-radius: 10px;
+  }
+
+  button[data-size="md"] {
+   font-size: 14px;
+   min-height: 42px;
+   padding: 10px 20px;
+  }
+
+  button[data-size="lg"] {
+   font-size: 16px;
+   min-height: 50px;
+   padding: 14px 28px;
+   border-radius: 14px;
   }
 
   button:disabled {
    pointer-events: none;
+   opacity: 0.5;
   }
 
   button:hover {
    color: #fff;
    background-color: #1A1A1A;
-   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+   box-shadow: rgba(0, 0, 0, 0.2) 0 6px 12px;
    transform: translateY(-2px);
   }
 

@@ -20,6 +20,7 @@ export interface AnexoPayload {
   }
 
 export const getAllProducts = () => api.get(`${API_BASE_URL}/listarProdutos`)
+export const getProductByTittle = (title: string) => api.get(`${API_BASE_URL}/buscarProdutosPorTitulo`, { params: { titulo: title } })
 export const getProducthighlighted = () => api.get(`${API_BASE_URL}/listarProdutosEmDestaque`)
 export const addProductToCart = (produtoId: number) => {
   return api.post(`${API_BASE_URL}/adicionarProdutoAoCarrinho/${produtoId}`, {})

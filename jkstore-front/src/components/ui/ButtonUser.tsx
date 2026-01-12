@@ -32,7 +32,7 @@ const ButtonUser = ({ size, className, onClick, type }: ButtonProps) => {
         <nav className="popup-window">
           <legend>Menu Rápido</legend>
           <ul>
-            <li>
+            {/* <li>
               <button 
                 className={className}
                 onClick={onClick}
@@ -42,7 +42,7 @@ const ButtonUser = ({ size, className, onClick, type }: ButtonProps) => {
                     <NotebookPen />
                     <span>Meu Perfil</span>
               </button>
-            </li>
+            </li> */}
             <li>
               {verificarUsuarioLogado() ? (
                 <button 

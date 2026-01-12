@@ -2,23 +2,28 @@ import "@/pages/register/RegisterPage.css"
 import Button from "@/components/ui/Button";
 import { useState } from "react";
 import { registerFunction } from "@/services/authService";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 type credentials = {
-  name: string;
+  nome: string;
   login: string;
   email: string;
   senha: string;
 }
 
 export default function Register() {
-
-  const [credentials, setCredentials] = useState<credentials>({ name: "", login: "", email: "", senha: "" });
+  const navigate = useNavigate();
+  const [credentials, setCredentials] = useState<credentials>({ nome: "", login: "", email: "", senha: "" });
 
   async function SendRegister() {
     try {
       await registerFunction(credentials);
+      toast.success("Cadastro realizado com sucesso!");
+      navigate("/login");
     } catch (error) {
-      console.error("Erro no registro:", error);
+      console.error("Erro no cadastro:", error);
+      toast.error("Erro no cadastro. Verifique os dados.");
     }
   }
 
@@ -52,13 +57,13 @@ export default function Register() {
               <label htmlFor="name" className="register-label">
                 Nome completo
               </label>
-              <input type="text" 
-                     id="name" 
-                     className="register-input" 
-                     placeholder="Digite seu nome completo" 
-                     value={credentials.name}
-                     onChange={e => setCredentials({ ...credentials, name: e.target.value })}
-                     />
+              <input type="text"
+                id="name"
+                className="register-input"
+                placeholder="Digite seu nome completo"
+                value={credentials.nome}
+                onChange={e => setCredentials({ ...credentials, nome: e.target.value })}
+              />
             </div>
 
             <div className="register-form-group">
@@ -78,29 +83,29 @@ export default function Register() {
               <label htmlFor="email" className="register-label">
                 E-mail
               </label>
-              <input type="email" 
-                     id="email" 
-                     className="register-input" 
-                     placeholder="Digite seu e-mail" 
-                     value={credentials.email}
-                     onChange={e => setCredentials({ ...credentials, email: e.target.value })}
-                     />
+              <input type="email"
+                id="email"
+                className="register-input"
+                placeholder="Digite seu e-mail"
+                value={credentials.email}
+                onChange={e => setCredentials({ ...credentials, email: e.target.value })}
+              />
             </div>
 
             <div className="register-form-group">
               <label htmlFor="password" className="register-label">
                 Senha
               </label>
-              <input type="password" 
-                     id="password" 
-                     className="register-input" 
-                     placeholder="Digite sua senha" 
-                     value={credentials.senha}
-                     onChange={e => setCredentials({ ...credentials, senha: e.target.value })}
-                     />
+              <input type="password"
+                id="password"
+                className="register-input"
+                placeholder="Digite sua senha"
+                value={credentials.senha}
+                onChange={e => setCredentials({ ...credentials, senha: e.target.value })}
+              />
             </div>
 
-            <Button href="/login" size="md" onClick={SendRegister}>
+            <Button type="button" size="md" onClick={SendRegister}>
               Cadastrar
             </Button>
 

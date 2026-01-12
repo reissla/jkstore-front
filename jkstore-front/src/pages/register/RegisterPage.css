@@ -1,7 +1,7 @@
 .register-container {
   display: flex;
   min-height: 100vh;
-  background-color: #fff;
+  background: var(--color-surface);
 }
 
 .register-image-panel {
@@ -21,33 +21,45 @@
 
 .register-image-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(6, 143, 217, 0.85), rgba(3, 4, 7, 0.75));
+  inset: 0;
+  background: linear-gradient(135deg,
+      rgba(15, 15, 15, 0.92) 0%,
+      rgba(26, 26, 26, 0.85) 50%,
+      rgba(15, 15, 15, 0.9) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: var(--space-10);
   text-align: center;
 }
 
+.register-image-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(201, 162, 39, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
 .register-image-title {
-  font-size: 48px;
-  font-weight: 700;
-  color: #fff;
-  margin: 0 0 16px 0;
-  letter-spacing: -0.5px;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 var(--space-4) 0;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
 }
 
 .register-image-subtitle {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--font-size-xl);
+  color: rgba(255, 255, 255, 0.85);
   margin: 0;
   max-width: 400px;
-  line-height: 1.6;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
 }
 
 .register-form-panel {
@@ -55,96 +67,97 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
-  background-color: #fff;
+  padding: var(--space-10) var(--space-6);
+  background: var(--color-surface);
 }
 
 .register-card {
   width: 100%;
   max-width: 440px;
-  padding: 48px 40px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(3, 4, 7, 0.08);
+  padding: var(--space-10) var(--space-8);
+  background: var(--color-surface);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--color-border-light);
 }
 
 .register-icon {
   display: flex;
   justify-content: center;
-  margin-bottom: 24px;
-  color: #068fd9;
+  margin-bottom: var(--space-6);
+  color: var(--color-primary);
 }
 
 .register-title {
-  font-size: 32px;
+  font-size: var(--font-size-3xl);
   font-weight: 700;
-  color: #030407;
+  color: var(--color-text-primary);
   text-align: center;
-  margin: 0 0 32px 0;
-  letter-spacing: -0.5px;
+  margin: 0 0 var(--space-8) 0;
+  letter-spacing: -0.02em;
 }
 
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-5);
 }
 
 .register-form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .register-label {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
-  color: #030407;
-  letter-spacing: 0.2px;
+  color: var(--color-text-primary);
+  letter-spacing: 0.01em;
 }
 
 .register-input {
   width: 100%;
-  padding: 14px 16px;
-  font-size: 15px;
-  color: #030407;
-  background-color: #fff;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  background: var(--color-background);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
   outline: none;
-  transition: all 0.2s ease;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  box-sizing: border-box;
+  transition: all var(--transition-base);
+  font-family: var(--font-family);
 }
 
 .register-input::placeholder {
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 .register-input:focus {
-  border-color: #068fd9;
-  box-shadow: 0 0 0 3px rgba(6, 143, 217, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.15);
+  background: var(--color-surface);
 }
 
 .register-button {
   width: 100%;
-  padding: 14px 24px;
-  font-size: 16px;
+  padding: 1rem 2rem;
+  font-size: var(--font-size-base);
   font-weight: 600;
-  color: #fff;
-  background-color: #068fd9;
+  color: white;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 8px;
-  letter-spacing: 0.3px;
+  transition: all var(--transition-base);
+  margin-top: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .register-button:hover {
-  background-color: #0577b8;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(6, 143, 217, 0.3);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold);
 }
 
 .register-button:active {
@@ -152,25 +165,25 @@
 }
 
 .register-footer {
-  margin-top: 8px;
+  margin-top: var(--space-2);
   text-align: center;
 }
 
 .register-login-text {
-  font-size: 14px;
-  color: #6b7280;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .register-login-link {
-  color: #068fd9;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.2s ease;
+  transition: all var(--transition-base);
 }
 
 .register-login-link:hover {
-  color: #0577b8;
+  color: var(--color-primary-dark);
   text-decoration: underline;
 }
 
@@ -180,42 +193,44 @@
   }
 
   .register-image-panel {
-    min-height: 300px;
+    min-height: 280px;
     flex: none;
   }
 
   .register-image-title {
-    font-size: 36px;
+    font-size: 2.5rem;
   }
 
   .register-image-subtitle {
-    font-size: 18px;
+    font-size: var(--font-size-lg);
   }
 
   .register-card {
-    padding: 40px 32px;
+    padding: var(--space-8) var(--space-6);
     box-shadow: none;
+    border: none;
+    border-radius: 0;
   }
 }
 
 @media (max-width: 480px) {
   .register-form-panel {
-    padding: 24px 16px;
+    padding: var(--space-6) var(--space-4);
   }
 
   .register-card {
-    padding: 32px 24px;
+    padding: var(--space-6) var(--space-4);
   }
 
   .register-title {
-    font-size: 28px;
+    font-size: var(--font-size-2xl);
   }
 
   .register-image-title {
-    font-size: 28px;
+    font-size: 2rem;
   }
 
   .register-image-subtitle {
-    font-size: 16px;
+    font-size: var(--font-size-base);
   }
 }
